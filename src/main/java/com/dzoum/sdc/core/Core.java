@@ -26,16 +26,20 @@ public class Core extends JPanel implements Runnable, KeyListener {
 	// graphics
 	private Window window;
 	private Screen screen;
+	
+	// world
+	private World world;
 
 	public Core(Config config) {
 		this.config = config;
 		this.running = false;
 		this.window = new Window(this, this.config);
 		this.screen = new Screen(this, this.config);
-		this.init();
+		this.world = new World(this, this.config);
+		this.initWindow();
 	}
 
-	private void init() {
+	private void initWindow() {
 		setPreferredSize(new Dimension(config.getAppWidth() * config.getAppScale(),
 				config.getAppHeight() * config.getAppScale()));
 		setFocusable(true);
@@ -102,10 +106,12 @@ public class Core extends JPanel implements Runnable, KeyListener {
 	}
 
 	public void update() {
+		world.update();
 	}
 
 	public void render() {
 		screen.colorize(Color.PINK);
+		world.render(screen);
 		screen.render();
 	}
 

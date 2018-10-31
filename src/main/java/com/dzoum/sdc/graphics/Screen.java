@@ -38,6 +38,13 @@ public class Screen {
 		g.drawString(text, x, y);
 	}
 	
+	public void renderLine(int x, int y, int width, int height, Color color) {
+		Color save = g.getColor();
+		g.setColor(color);
+		g.drawLine(x, y, x + width, y + height);
+		g.setColor(save);
+	}
+	
 	public void colorize(Color color) {
 		g.setColor(color);
 		g.fillRect(0, 0, config.getAppWidth(), config.getAppHeight());

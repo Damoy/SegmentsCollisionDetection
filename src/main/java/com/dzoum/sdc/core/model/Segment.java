@@ -5,30 +5,30 @@ import java.awt.Color;
 import com.dzoum.sdc.graphics.Screen;
 
 public class Segment {
-	
-	private Color color;
-	private int height;
-	private int width;
+
 	private int x;
 	private int y;
-		
-	public Segment(Color color, int height, int width, int x, int y) {
-		this.color = color;
-		this.height = height;
-		this.width = width;
+	private int width;
+	private int height;
+	private Color color;
+
+	public Segment(int x, int y, int width, int height, Color color) {
 		this.x = x;
 		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.color = color;
 	}
 
 	public void update() {
-		
+		++x;
+		++y;
 	}
-	
+
 	public void render(Screen s) {
-		
+		s.renderLine(x, y, width, height, color);
 	}
-	
-	
+
 	public int getX() {
 		return x;
 	}
@@ -69,5 +69,4 @@ public class Segment {
 		this.width = width;
 	}
 
-	
 }
