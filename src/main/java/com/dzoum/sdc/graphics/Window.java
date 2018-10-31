@@ -3,6 +3,7 @@ package com.dzoum.sdc.graphics;
 import javax.swing.JFrame;
 
 import com.dzoum.sdc.core.Core;
+import com.dzoum.sdc.core.config.Config;
 
 public class Window {
 
@@ -11,7 +12,7 @@ public class Window {
 	private Config config;
 
 	public Window(Core core, Config config) {
-		this.win = new JFrame(config.getGameTitle());
+		this.win = new JFrame(config.getAppTitle());
 		this.core = core;
 		this.config = config;
 	}
@@ -30,7 +31,7 @@ public class Window {
 	}
 
 	public void setTitle(String newTitle) {
-		win.setTitle(config.getGameTitle() + " | " + newTitle);
+		win.setTitle(config.getAppTitle() + " | " + newTitle);
 	}
 
 }

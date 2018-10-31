@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import com.dzoum.sdc.core.Core;
+import com.dzoum.sdc.core.config.Config;
 
 public class Screen {
 	
@@ -17,13 +18,15 @@ public class Screen {
 	public Screen(Core core, Config config) {
 		this.core = core;
 		this.config = config;
-		this.content = new BufferedImage(config.getGameWidth(), config.getGameHeight(), config.getImageType());
+		this.content = new BufferedImage(config.getAppWidth(), config.getAppHeight(), config.getAppScreenType());
 		this.g = (Graphics2D) this.content.getGraphics();	
 	}
 	
 	public void render() {
 		Graphics g2 = core.getGraphics();
-		g2.drawImage(content, 0, 0, config.getGameWidth() * config.getGameScale(), config.getGameHeight() * config.getGameScale(), null);
+		g2.drawImage(content, 0, 0,
+				config.getAppWidth() * config.getAppScale(),
+				config.getAppHeight() * config.getAppScale(), null);
 		g2.dispose();
 	}
 	
@@ -37,7 +40,7 @@ public class Screen {
 	
 	public void colorize(Color color) {
 		g.setColor(color);
-		g.fillRect(0, 0, config.getGameWidth(), config.getGameHeight());
+		g.fillRect(0, 0, config.getAppWidth(), config.getAppHeight());
 	}
 
 }

@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
 
+import com.dzoum.sdc.core.config.Config;
 import com.dzoum.sdc.graphics.Screen;
 import com.dzoum.sdc.graphics.Window;
 
@@ -35,8 +36,8 @@ public class Core extends JPanel implements Runnable, KeyListener {
 	}
 
 	private void init() {
-		setPreferredSize(new Dimension(config.getGameWidth() * config.getGameScale(),
-				config.getGameHeight() * config.getGameScale()));
+		setPreferredSize(new Dimension(config.getAppWidth() * config.getAppScale(),
+				config.getAppHeight() * config.getAppScale()));
 		setFocusable(true);
 		requestFocus();
 	}

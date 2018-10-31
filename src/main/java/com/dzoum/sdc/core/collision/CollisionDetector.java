@@ -1,4 +1,4 @@
-package com.dzoum.sdc.core;
+package com.dzoum.sdc.core.collision;
 
 public final class CollisionDetector {
 	
