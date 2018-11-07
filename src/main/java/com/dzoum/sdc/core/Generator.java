@@ -25,13 +25,15 @@ public final class Generator {
 		for(int i = 0; i < nb; ++i) {
 			x = irand(0, config.getAppWidth() - width);
 			y = irand(0, config.getAppHeight() - height);
-			dx = ibool() ? 1 : -1;
-			dy = ibool() ? 1 : -1;
+//			dx = ibool() ? 1 : -1;
+//			dy = ibool() ? 1 : -1;
+			dx = 0;
+			dy = 0;
 			angleDegrees = drand(0, 90);
-			dangle = drand(-2, 2);
+			dangle = drand(-3, 3);
 			
 			while(dangle == 0) {
-				dangle = drand(-1, 1);
+				dangle = drand(-3, 3);
 			}
 			
 			segments.add(newSeg(x, y, dx, dy, width, height, angleDegrees, dangle, config.getSegmentsColor()));

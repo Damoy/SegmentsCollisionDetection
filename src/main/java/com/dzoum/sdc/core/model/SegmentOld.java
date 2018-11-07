@@ -1,0 +1,222 @@
+package com.dzoum.sdc.core.model;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
+
+import com.dzoum.sdc.graphics.Screen;
+
+public class SegmentOld {
+
+	private Line2D shape;
+	private Color color;
+	private int dx;
+	private int dy;
+	private int width;
+	private int height;
+	private double angleDegrees;
+	private double dangle;
+
+	public SegmentOld(int x, int y, int dx, int dy,
+			int width, int height, double angleDegrees, double dangle, Color color) {
+		//this.shape = new Line2D.Float(x, y, x + width, y + height);
+//		this.shape = new Line2D.Float((float) (x + Math.sin(Math.toRadians(angleDegrees)) * (dx)),
+//				(float) (y + Math.cos(Math.toRadians(angleDegrees)) * (dy)),
+//				x + width, y + height);
+		// shape.getX1() + Math.sin(Math.toRadians(angleDegrees)) * (dx)
+		this.dx = dx;
+		this.dy = dy;
+		this.width = width;
+		this.height = height;
+		this.color = color;
+		this.angleDegrees = angleDegrees;
+		this.dangle = dangle;
+	}
+	
+
+	public void update() {
+		angleDegrees += dangle;
+
+		
+		
+//		if(shape == null) {
+//			rotate(0, 0, width,height, angleDegrees);
+//		} else {
+//			
+//			rotate(shape.getX1() + dx, shape.getY1() + dy, shape.getX2(), shape.getY2(), angleDegrees);			
+//		}
+
+		
+//		double x = shape.getX1() + Math.sin(Math.toRadians(angleDegrees)) * (dx);
+//		double y = shape.getY1() + Math.cos(Math.toRadians(angleDegrees)) * (dy);
+//		
+//// 		double x = shape.getX1() + Math.cos(angleDegrees);
+//		// double y = shape.getY1() + Math.sin(angleDegrees);
+//		shape.setLine(x, y, x + width, y + height);
+		//shape.setLine(x * Math.toRadians(angleDegrees), y * Math.toRadians(angleDegrees), x + width, y + height);
+		
+//		incX(dx);
+//		incY(dy);
+	}
+	
+	
+	public void rotate(double x1, double y1, double x2, double y2, double angleDegrees) {
+		double angle = Math.toRadians(angleDegrees);
+	    // a and b are arrays of length 2 with the x, y coordinate of
+	    // your segments extreme points with the form [x, y]
+
+	    double mx = (x1 + x2) / 2.0;
+	    double my = (y1 + y2) / 2.0;
+
+	    // Make the midpoint the origin
+	    double amidX = x1 - mx;
+	    double amidY = y1 - my;
+
+	    double bmidX = x2 - mx;
+	    double bmidY = y2 - my;
+
+	    x1 = Math.cos(angle) * amidX - Math.sin(angle) * amidY;
+	    y1 = Math.sin(angle) * amidX + Math.cos(angle) * amidY;
+	    x2 = Math.cos(angle) * bmidX - Math.sin(angle) * bmidY;
+	    y2 = Math.sin(angle) * bmidX + Math.cos(angle) * bmidY;
+
+	    x1 += mx;
+	    y1 += my;
+	    x2 += mx;
+	    y2 += my;
+	    
+	    if(shape == null)
+	    	shape = new Line2D.Double(x1, y1, x2, y2);
+	    else
+	    	shape.setLine(x1, y1, x2, y2);
+	}
+	
+	public void incX(double dx) {
+		shape.setLine(shape.getX1() + dx, shape.getY1(),
+				shape.getX1() + dx + width, shape.getY2());
+	}
+	
+	public void incY(double dy) {
+		shape.setLine(shape.getX1(), shape.getY1() + dy,
+				shape.getX2(), shape.getY1() + dy + height);
+	}
+
+	public void render(Screen s) {
+		Graphics2D g = s.g();
+		Color save = g.getColor();
+		g.setColor(color);
+		
+		// if(shape != null)
+			// g.drawLine((int) shape.getX1(), (int) shape.getY1(), (int) shape.getX2(), (int) shape.getY2());
+		
+		
+		// g.drawLine((int) shape.getX1(), (int) shape.getY1(), (int) shape.getX2(), (int) shape.getY2());
+		// g.drawLine((int) shape.getX1(), (int) shape.getY1(), (int) shape.getX2(), (int) shape.getY2());
+		//g.drawLine((int) shape.getX1(), (int) shape.getY1(), (int) shape.getX2(), (int) shape.getY2());
+		
+		AffineTransform atSave = g.getTransform();
+		AffineTransform at =  AffineTransform.getRotateInstance(
+				Math.toRadians(angleDegrees), shape.getX1(), shape.getY1());
+		
+		// Draw the rotated line
+		g.draw(at.createTransformedShape(shape));
+		g.setTransform(atSave);
+		g.setColor(save);
+	}
+	
+	private double m00;
+	private double m01;
+	private double m02;
+	private double m03;
+	
+	private double m10;
+	private double m11;
+	private double m12;
+	private double m13;
+	
+	private double m20;
+	private double m21;
+	private double m22;
+	private double m23;
+	
+	private double m30;
+	private double m31;
+	private double m32;
+	private double m33;
+	
+	private int state;
+	private int type;
+	
+	private void rotate() {
+		double ax = shape.getX1();
+		double ay = shape.getY1();
+        double sin = m10;
+        double oneMinusCos = 1.0 - m00;
+        
+        m02 = ax * oneMinusCos + ay * sin;
+        m12 = ay * oneMinusCos - ax * sin;
+        
+        if (m02 != 0.0 || m12 != 0.0) {
+            state |= 1;
+            type |= 1;
+        }
+	}
+	
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getDx() {
+		return dx;
+	}
+
+	public void setDx(int dx) {
+		this.dx = dx;
+	}
+
+	public int getDy() {
+		return dy;
+	}
+
+	public void setDy(int dy) {
+		this.dy = dy;
+	}
+
+	public double getAngleDegrees() {
+		return angleDegrees;
+	}
+
+	public void setAngleDegrees(double angleDegrees) {
+		this.angleDegrees = angleDegrees;
+	}
+
+	public double getDangle() {
+		return dangle;
+	}
+
+	public void setDangle(double dangle) {
+		this.dangle = dangle;
+	}
+
+}

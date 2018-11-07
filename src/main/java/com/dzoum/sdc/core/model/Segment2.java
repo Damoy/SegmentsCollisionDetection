@@ -7,7 +7,7 @@ import java.awt.geom.Line2D;
 
 import com.dzoum.sdc.graphics.Screen;
 
-public class Segment {
+public class Segment2 {
 
 	private Line2D shape;
 	private Color color;
@@ -18,7 +18,7 @@ public class Segment {
 	private double angleDegrees;
 	private double dangle;
 
-	public Segment(int x, int y, int dx, int dy,
+	public Segment2(int x, int y, int dx, int dy,
 			int width, int height, double angleDegrees, double dangle, Color color) {
 		this.shape = new Line2D.Float(x, y, x + width, y + height);
 		this.dx = dx;
@@ -40,11 +40,10 @@ public class Segment {
 		
 //		x1 += dx;
 //		y1 += dy;
+//		x2 = x1 * Math.cos(Math.toRadians(angleDegrees));
+//		y2 = y1 * Math.sin(Math.toRadians(angleDegrees));
 		
-//		x2 = x1 * Math.cos(Math.toRadians(angleDegrees)) - y1 * Math.sin(Math.toRadians(angleDegrees)); 
-//		y2 = y1 * Math.cos(Math.toRadians(angleDegrees));
-		
-//		x' = x * cos(Math.toRadiasn - y sin f
+//		x' = x cos f - y sin f
 //		y' = y cos f + x sin f
 		
 		incX(dx);
@@ -75,8 +74,7 @@ public class Segment {
 //		g.setColor(savedColor);
 		AffineTransform atSave = g.getTransform();
 		AffineTransform at = AffineTransform.getRotateInstance(
-				Math.toRadians(angleDegrees),
-				shape.getX1() + (width >> 1), shape.getY1() + (height >> 1));
+				Math.toRadians(angleDegrees), shape.getX1(), shape.getY1());
 		
 		// Draw the rotated line
 		g.draw(at.createTransformedShape(shape));
