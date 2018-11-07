@@ -6,7 +6,6 @@ import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.impl.factory.Lists;
 
-import com.dzoum.sdc.core.config.Config;
 import com.dzoum.sdc.core.model.Segment;
 
 public class Factory {
@@ -48,9 +47,9 @@ public class Factory {
 	/**
 	 * Create a new segment.
 	 */
-	public static Segment newSeg(Config config, float x, float y, float dx, float dy,
-			int width, int height, float angleDegrees, float dangle) {
-		return new Segment(config, x, y, dx, dy, width, height, angleDegrees, dangle, config.getSegmentsColor());
+	public static Segment newSeg(float x, float y, float dx, float dy,
+			int width, int height, float angleDegrees, float dangle, Color color) {
+		return new Segment(x, y, dx, dy, width, height, angleDegrees, dangle, color);
 	}
 
 }

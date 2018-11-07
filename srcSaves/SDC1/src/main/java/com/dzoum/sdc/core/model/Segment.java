@@ -3,12 +3,10 @@ package com.dzoum.sdc.core.model;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import com.dzoum.sdc.core.config.Config;
 import com.dzoum.sdc.graphics.Screen;
 
 public class Segment {
 
-	private Config config;
 	private Color color;
 
 	// center x, y
@@ -32,9 +30,8 @@ public class Segment {
 	private float angleDegrees;
 	private float dangle;
 
-	public Segment(Config config, float cx, float cy, float dx, float dy,
+	public Segment(float cx, float cy, float dx, float dy,
 			int width, int height, float angleDegrees, float dangle, Color color) {
-		this.config = config;
 		this.cx = cx;
 		this.cy = cy;
 		this.dx = dx;
@@ -49,8 +46,6 @@ public class Segment {
 	public void update() {
 		angleDegrees += dangle;
 		double angleRads = Math.toRadians(angleDegrees);
-		
-		checkBounds();
 		
 		cx += dx;
 		cy += dy;
@@ -77,38 +72,6 @@ public class Segment {
 		y1 += cy;
 		x2 += cx;
 		y2 += cy;
-	}
-	
-	
-	// Check walls collisions
-	private void checkBounds() {
-		if(x1 <= 0) {
-			x1 = 0;
-			dx = -dx;
-		} else if(x1 + width >= config.getAppWidth()) {
-			x1 = config.getAppWidth() - width;
-			dx = -dx;
-		} else if(x2 <= 0) {
-			x2 = 0;
-			dx = -dx;
-		} else if(x2 + width >= config.getAppWidth()) {
-			x2 = config.getAppWidth() - width;
-			dx = -dx;
-		} 
-		
-		if(y1 <= 0) {
-			y1 = 0;
-			dy = -dy;
-		} else if(y1 >= config.getAppHeight()) {
-			y1 = config.getAppHeight() - height;
-			dy = -dy;
-		} else if(y2 <= 0) {
-			y2 = 0;
-			dy = -dy;
-		} else if(y2 >= config.getAppHeight()) {
-			y2 = config.getAppHeight();
-			dy = -dy;
-		}
 	}
 	
 	public void render(Screen s) {

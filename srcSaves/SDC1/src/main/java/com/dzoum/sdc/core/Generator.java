@@ -34,8 +34,7 @@ public final class Generator {
 				dangle = frand(-3, 3);
 			}
 			
-			segments.add(newSeg(config, x, y, dx, dy,
-					width, height, angleDegrees, dangle));
+			segments.add(newSeg(x, y, dx, dy, width, height, angleDegrees, dangle, config.getSegmentsColor()));
 		}
 		
 		return segments.toImmutable();
