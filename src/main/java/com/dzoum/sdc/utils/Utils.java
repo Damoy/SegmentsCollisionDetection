@@ -63,6 +63,20 @@ public class Utils {
 	public static int irand(int min, int max) {
 		return SEED.nextInt((max - min) + 1) + min;
 	}
+	
+	/**
+	 * Get random doouble in range [min,max].
+	 */
+	public static double drand(double min, double max) {
+		return min + (max - min) * SEED.nextDouble();
+	}
+	
+	/**
+	 * Get random boolean.
+	 */
+	public static boolean ibool() {
+		return SEED.nextBoolean();
+	}
 
 	/**
 	 * Get log2 of inquired value.
