@@ -85,11 +85,11 @@ public class Core extends JPanel implements Runnable, KeyListener {
 				shouldRender = true;
 			}
 
-			try {
-				Thread.sleep(2);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+//			try {
+//				Thread.sleep(2);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
 
 			if (shouldRender) {
 				frames++;

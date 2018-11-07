@@ -3,10 +3,13 @@ package com.dzoum.sdc.graphics;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 
 import com.dzoum.sdc.core.Core;
 import com.dzoum.sdc.core.config.Config;
+import com.dzoum.sdc.core.model.Segment;
 
 public class Screen {
 	
@@ -38,13 +41,23 @@ public class Screen {
 		g.drawString(text, x, y);
 	}
 	
+	public void renderSegment(Segment segment) {
+		Color save = g.getColor();
+		g.setColor(segment.getColor());
+		
+		AffineTransform atSave = g.getTransform();
+		AffineTransform at =  AffineTransform.getRotateInstance(
+				Math.toRadians(segment.getAngleDegrees()), segment.getX(), segment.getY());
+		
+		// Draw the rotated line
+		g.draw(at.createTransformedShape(segment.getShape()));
+		g.setColor(save);
+		g.setTransform(atSave);
+	}
+	
 	public void colorize(Color color) {
 		g.setColor(color);
 		g.fillRect(0, 0, config.getAppWidth(), config.getAppHeight());
-	}
-	
-	public Graphics2D g() {
-		return g;
 	}
 
 }

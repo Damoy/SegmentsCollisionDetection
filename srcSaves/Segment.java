@@ -1,15 +1,13 @@
 package com.dzoum.sdc.core.model;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Line2D;
 
 import com.dzoum.sdc.graphics.Screen;
+import com.dzoum.sdc.utils.Vector2i;
 
 public class Segment {
 
-	private Line2D shape;
+	private Vector2i pos;
 	private Color color;
 	private int dx;
 	private int dy;
@@ -20,7 +18,7 @@ public class Segment {
 
 	public Segment(int x, int y, int dx, int dy,
 			int width, int height, double angleDegrees, double dangle, Color color) {
-		this.shape = new Line2D.Float(x, y, x + width, y + height);
+		this.pos = new Vector2i(x, y);
 		this.dx = dx;
 		this.dy = dy;
 		this.width = width;
@@ -32,35 +30,26 @@ public class Segment {
 
 	public void update() {
 		angleDegrees += dangle;
-		incX(dx);
-		incY(dy);
-	}
-	
-	public void incX(double dx) {
-		shape.setLine(shape.getX1() + dx, shape.getY1(),
-				shape.getX1() + dx + width, shape.getY2());
-	}
-	
-	public void incY(double dy) {
-		shape.setLine(shape.getX1(), shape.getY1() + dy,
-				shape.getX2(), shape.getY1() + dy + height);
+		pos.incX(dx);
+		pos.incY(dy);
 	}
 
 	public void render(Screen s) {
-		Graphics2D g = s.g();
-		Color save = g.getColor();
-		g.setColor(color);
-		
-		AffineTransform atSave = g.getTransform();
-		AffineTransform at =  AffineTransform.getRotateInstance(
-				Math.toRadians(angleDegrees), shape.getX1(), shape.getY1());
-		
-		// Draw the rotated line
-		g.draw(at.createTransformedShape(shape));
-		g.setColor(save);
-		g.setTransform(atSave);
+		s.renderLine(pos.getX(), pos.getY(), width, height, angleDegrees, color);
 	}
 	
+	public Vector2i getPos() {
+		return pos;
+	}
+
+	public int getX() {
+		return pos.getX();
+	}
+
+	public int getY() {
+		return pos.getY();
+	}
+
 	public Color getColor() {
 		return color;
 	}
@@ -115,6 +104,10 @@ public class Segment {
 
 	public void setDangle(double dangle) {
 		this.dangle = dangle;
+	}
+
+	public void setPos(Vector2i pos) {
+		this.pos = pos;
 	}
 
 }

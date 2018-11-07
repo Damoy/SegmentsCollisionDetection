@@ -1,5 +1,7 @@
 package com.dzoum.sdc.core.config;
 
+import java.awt.Color;
+
 public class Config {
 
 	private String appTitle;
@@ -7,13 +9,18 @@ public class Config {
 	private int appHeight;
 	private int appScale;
 	private int appScreenType;
+	private int segmentsCount;
+	private Color segmentsColor;
 
-	public Config(String appTitle, int appWidth, int appHeight, int appScale, int appScreenType) {
+	public Config(String appTitle, int appWidth, int appHeight, int appScale, int appScreenType,
+			int segmentsCount, Color segmentsColor) {
 		this.appWidth = appWidth;
 		this.appHeight = appHeight;
 		this.appTitle = appTitle;
 		this.appScale = appScale;
 		this.appScreenType = appScreenType;
+		this.segmentsCount = segmentsCount;
+		this.segmentsColor = segmentsColor;
 	}
 
 	public int getAppWidth() {
@@ -54,6 +61,22 @@ public class Config {
 
 	public void setAppScreenType(int appScreenType) {
 		this.appScreenType = appScreenType;
+	}
+
+	public int getSegmentsCount() {
+		return segmentsCount;
+	}
+
+	public void setSegmentsCount(int segmentsCount) {
+		this.segmentsCount = segmentsCount;
+	}
+
+	public Color getSegmentsColor() {
+		return segmentsColor;
+	}
+
+	public void setSegmentsColor(Color segmentsColor) {
+		this.segmentsColor = segmentsColor;
 	}
 
 }

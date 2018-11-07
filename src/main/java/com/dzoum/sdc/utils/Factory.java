@@ -47,8 +47,9 @@ public class Factory {
 	/**
 	 * Create a new segment.
 	 */
-	public static Segment newSeg(int x, int y, int width, int height, Color color) {
-		return new Segment(x, y, width, height, color);
+	public static Segment newSeg(int x, int y, int dx, int dy,
+			int width, int height, double angleDegrees, double dangle, Color color) {
+		return new Segment(x, y, dx, dy, width, height, angleDegrees, dangle, color);
 	}
 
 }

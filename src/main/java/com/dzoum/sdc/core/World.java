@@ -6,9 +6,6 @@ import com.dzoum.sdc.core.config.Config;
 import com.dzoum.sdc.core.model.Segment;
 import com.dzoum.sdc.graphics.Screen;
 
-import java.awt.Color;
-import static com.dzoum.sdc.utils.Factory.*;
-
 public class World {
 
 	private Core core;
@@ -18,7 +15,7 @@ public class World {
 	public World(Core core, Config config) {
 		this.core = core;
 		this.config = config;
-		segments = newiList(newSeg(0, 0, 1, 20, Color.MAGENTA));
+		segments = Generator.generateSegments(config);
 	}
 
 	public void update() {
