@@ -1,44 +1,27 @@
 package com.dzoum.sdc.utils;
 
-public class TickCounter {
+/**
+ * Global tick counter. 
+ */
+public final class TickCounter {
 	
-	private int ticks;
-	private int bound;
-	private boolean running;
+	private TickCounter() {}
 	
-	public TickCounter(int bound) {
-		this.ticks = 0;
-		this.bound = bound;
-		this.running = false;
-	}
+	private static int ticks = 0;
+	private static boolean minute = false;
 	
-	public void update() { // 1 sec => 60 updates
-		if (this.running) {
-			this.ticks += 1;		
-			checkState();
+	public static void update() {
+		++ticks;
+		if(ticks >= 1800) {
+			minute = true;
+			ticks = 0;
 		}
 	}
 	
-	public void start() {
-		if(!running) {
-			running = true;
-		}
+	public static boolean minutePassed() {
+		if(!minute) return false;
+		boolean ret = minute;
+		minute = false;
+		return ret;
 	}
-	
-	private void checkState() {	
-		if (ticks >= bound) {
-			running = false;
-		}
-	}
-	
-	public boolean isRunning() {
-		return running; 
-	}
-	
-	public void reset() {
-		this.ticks = 0;
-		this.running = false;
-	}
-	
-	
 }

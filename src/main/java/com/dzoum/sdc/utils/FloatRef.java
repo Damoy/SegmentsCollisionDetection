@@ -1,5 +1,8 @@
 package com.dzoum.sdc.utils;
 
+/**
+ * float wrapper.
+ */
 public class FloatRef {
 
 	public static float NULL = Float.MIN_VALUE;

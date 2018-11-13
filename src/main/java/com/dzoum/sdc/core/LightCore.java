@@ -1,54 +1,29 @@
 package com.dzoum.sdc.core;
 
-import java.awt.Color;
-import java.awt.Dimension;
-
-import javax.swing.JPanel;
-
 import com.dzoum.sdc.core.config.Config;
-import com.dzoum.sdc.graphics.Screen;
-import com.dzoum.sdc.graphics.Window;
 import com.dzoum.sdc.utils.Output;
 import com.dzoum.sdc.utils.TickCounter;
 
 /**
- * Main game loop.
- * Uses a thread object. 
+ * Same processing, without rendering.
+ * @see Core
  */
-public class Core extends JPanel implements Runnable {
-
-	private static final long serialVersionUID = -5524815598464412250L;
+public class LightCore implements Runnable {
 
 	// configuration
 	private Config config;
-	private Color screenColor;
 
 	// game thread
 	private Thread thread;
 	private boolean running;
 
-	// graphics
-	private Window window;
-	private Screen screen;
-	
 	// world
 	private World world;
 
-	public Core(Config config) {
+	public LightCore(Config config) {
 		this.config = config;
 		this.running = false;
-		this.window = new Window(this, this.config);
-		this.screen = new Screen(this, this.config);
 		this.world = new World(this.config);
-		this.screenColor = config.getScreenColor();
-		this.initWindow();
-	}
-
-	private void initWindow() {
-		setPreferredSize(new Dimension(config.getAppWidth() * config.getAppScale(),
-				config.getAppHeight() * config.getAppScale()));
-		setFocusable(true);
-		requestFocus();
 	}
 
 	@Override
@@ -56,6 +31,7 @@ public class Core extends JPanel implements Runnable {
 		long lastTime = System.nanoTime();
 		double unprocessed = 0;
 		double nsPerTick = 1000000000.0 / 60;
+		@SuppressWarnings("unused")
 		int frames = 0;
 
 		@SuppressWarnings("unused")
@@ -68,23 +44,24 @@ public class Core extends JPanel implements Runnable {
 			lastTime = now;
 			boolean shouldRender = true;
 
-			// 60 updates / second
+			long start = System.currentTimeMillis();
+			
 			while (unprocessed >= 1) {
 				ticks++;
 				update();
 				unprocessed -= 1;
 				shouldRender = true;
 			}
+			
+			start = System.currentTimeMillis() - start;
 
 			if (shouldRender) {
 				frames++;
-				render();
 			}
 
 			if (System.currentTimeMillis() - lastTimer1 > 1000) {
-				window.setTitle(config.getSegmentsCount() + " segments | " + frames + " fps");
+				Output.logn(config.getCollisionsCount() + ";" + start);
 				
-				Output.logn(config.getCollisionsCount() + ";" + frames);
 				if(TickCounter.minutePassed()) {
 					Output.averageToConsole();
 				}
@@ -101,19 +78,14 @@ public class Core extends JPanel implements Runnable {
 		TickCounter.update();
 	}
 
-	public void render() {
-		screen.colorize(screenColor);
-		world.render(screen);
-		screen.render();
-	}
-
 	public void start() {
 		if (running) {
 			return;
 		}
 
+		thread = new Thread(this);
 		running = true;
-		window.start();
+		thread.start();
 	}
 
 	public void stop() {
@@ -121,18 +93,7 @@ public class Core extends JPanel implements Runnable {
 			return;
 		}
 
-		window = null;
 		running = false;
-	}
-
-	@Override
-	public void addNotify() {
-		super.addNotify();
-		if (thread == null) {
-			thread = new Thread(this);
-			// addKeyListener(this);
-			thread.start();
-		}
 	}
 
 }

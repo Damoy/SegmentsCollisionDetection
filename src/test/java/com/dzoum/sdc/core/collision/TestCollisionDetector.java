@@ -1,3 +1,4 @@
+package com.dzoum.sdc.core.collision;
 //package com.lama.sdc.core.collision;
 //
 //import org.junit.Before;

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import org.eclipse.collections.api.list.ImmutableList;
-import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.map.MutableMap;
 
 import com.dzoum.sdc.core.World;
@@ -14,6 +13,14 @@ import com.dzoum.sdc.graphics.Screen;
 import com.dzoum.sdc.utils.Factory;
 import com.dzoum.sdc.utils.FloatRef;
 
+/**
+ * Segment model.
+ * 
+ * One segment knows others segments he is intersecting with.
+ * For them, he also knows where are located this intersections.
+ * It allows him to render circles at this locations.
+ * 
+ */
 public class Segment {
 	
 	private static class Pair<K, V> {
@@ -44,7 +51,6 @@ public class Segment {
 	private Color color;
 	private MutableMap<Segment, Pair<Float, Float>> collisions;
 	private ImmutableList<Segment> near;
-	private MutableList<Segment> collisionsWith;
 	private FloatRef xCollisionRef;
 	private FloatRef yCollisionRef;
 
@@ -65,9 +71,11 @@ public class Segment {
 	// sizes
 	private int width;
 	private int height;
+	private float knownAreaRadius;
 	private int circleRadius;
 	private int circlePosOffset;
 
+	// angle related
 	private float angleDegrees;
 	private float dangle;
 
@@ -81,33 +89,39 @@ public class Segment {
 		this.dy = dy;
 		this.width = width;
 		this.height = height;
+		this.knownAreaRadius = this.height * 1.125f;
 		this.circleRadius = height >> 3;
 		this.circlePosOffset = this.circleRadius >> 1;
 		this.angleDegrees = angleDegrees;
 		this.dangle = dangle;
 		this.color = config.getSegmentsColor();
 		this.collisions = Factory.newMap();
-		this.collisionsWith = Factory.newList();
 		this.near = null;
 		this.xCollisionRef = new FloatRef();
 		this.yCollisionRef = new FloatRef();
 	}
 	
 	public void update() {
+		// update angle
 		angleDegrees += dangle;
 		double angleRads = Math.toRadians(angleDegrees);
 		
+		// check screen bounds
 		checkBounds();
 		
+		// increase center position
 		cx += dx;
 		cy += dy;
 		
+		// save position
 		float saveCx = cx;
 		float saveCy = cy;
-		
+
+		// translate
 		cx = (-width >> 1);
 		cy = (-height >> 1);
 
+		// compute extremities positions
 		x1 = (float) (cx * Math.cos(angleRads) - cy * Math.sin(angleRads));
 		y1 = (float) (cy * Math.cos(angleRads) + cx * Math.sin(angleRads));
 		
@@ -117,40 +131,48 @@ public class Segment {
 		x2 = (float) (cx * Math.cos(angleRads) - cy * Math.sin(angleRads));
 		y2 = (float) (cy * Math.cos(angleRads) + cx * Math.sin(angleRads));
 		
+		// translate
 		cx = saveCx;
 		cy = saveCy;
 		
+		// update extremities positions
 		x1 += cx;
 		y1 += cy;
 		x2 += cx;
 		y2 += cy;
 		
-		near = world.select(this, getHeight());
+		// get segments that are around this (visibility radius: knownAreaRadius)
+		near = world.select(this, knownAreaRadius);
 		
-		for(Segment segment : near) {
-			if(segment.collisionsWith.contains(this)) continue;
+		for(Segment segment : near){
+			// avoid x checks y and y checks x
+			if(segment.collisions.containsKey(this)) continue;
 			
+			// used to contain collision position
 			xCollisionRef.reset();
 			yCollisionRef.reset();
 			
+			// if intersections
 			if(CollisionDetector.intersects(this, segment, xCollisionRef, yCollisionRef)) {
+				// if intersection with segment already exists
 				if(collisions.containsKey(segment)){
+					// update circle position
 					collisions.get(segment).key = xCollisionRef.value;
 					collisions.get(segment).value = yCollisionRef.value;
 				} else {
+					// else, add a new circle
 					collisions.put(segment, new Pair<>(config, xCollisionRef.value, yCollisionRef.value));
 					config.incCollisionsCount();
-					collisionsWith.add(segment);
 				}
 			} else if(collisions.containsKey(segment)) {
+				// end of collision
 				collisions.remove(segment);
 				config.decCollisionsCount();
-				collisionsWith.remove(segment);
 			}
 		}
 	}
 	
-	// Check walls collisions
+	// Check screen bounds collisions
 	private void checkBounds() {
 		if(x1 <= 0) {
 			x1 = 0;
@@ -185,8 +207,11 @@ public class Segment {
 		Graphics2D g = s.g();
 		Color savedColor = g.getColor();
 		g.setColor(color);
+		
+		// render segment
 		g.drawLine((int) x1, (int) y1, (int) x2, (int) y2);
 		
+		// render segment intersections
 		collisions.values().forEach(p -> {
 			g.setColor(p.getColor());
 			g.fillOval((int) p.key.floatValue() - circlePosOffset, (int) p.value.floatValue() - circlePosOffset,

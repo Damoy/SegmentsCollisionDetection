@@ -5,10 +5,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
+/**
+ * Some utilities.
+ */
 public class Utils {
 	
 	public static Color COLLISION_COLOR = Color.RED;
@@ -24,32 +25,6 @@ public class Utils {
 
 	public static void setRandomSeed(long seed) {
 		SEED = new Random(seed);
-	}
-
-	/**
-	 * Assert a condition.
-	 * 
-	 * @param cond   the condition to check
-	 * @param err    message to throw
-	 * @param eclazz exception class to use
-	 */
-	public static void assertTrue(boolean cond, String err, Class<? extends Exception> eclazz) {
-		if (!cond) {
-			try {
-				Constructor<? extends Exception> ce = eclazz.getConstructor(String.class);
-				ce.newInstance(err);
-			} catch (NoSuchMethodException | SecurityException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	public static <T> void println(T o) {
@@ -123,13 +98,4 @@ public class Utils {
 		return title.replaceAll("[ *$^!;:,=)('\"&]", "_");
 	}
 
-	public static final class Pair<A, B> {
-		public final A first;
-		public final B second;
-
-		public Pair(A first, B second) {
-			this.first = first;
-			this.second = second;
-		}
-	}
 }

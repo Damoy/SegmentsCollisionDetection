@@ -5,6 +5,9 @@ import javax.swing.JFrame;
 import com.dzoum.sdc.core.Core;
 import com.dzoum.sdc.core.config.Config;
 
+/**
+ * Our window model.
+ */
 public class Window {
 
 	private JFrame win;

@@ -3,6 +3,9 @@ package com.dzoum.sdc.core.config;
 import java.awt.Color;
 import java.awt.Font;
 
+/**
+ * Whole application configuration container.
+ */
 public class Config {
 
 	private String appTitle;

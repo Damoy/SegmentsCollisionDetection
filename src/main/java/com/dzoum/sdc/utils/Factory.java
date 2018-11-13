@@ -10,6 +10,9 @@ import com.dzoum.sdc.core.World;
 import com.dzoum.sdc.core.config.Config;
 import com.dzoum.sdc.core.model.Segment;
 
+/**
+ * Main objects factory.
+ */
 public class Factory {
 
 	private Factory() {

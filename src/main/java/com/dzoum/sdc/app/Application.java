@@ -17,12 +17,12 @@ import com.dzoum.sdc.core.config.Config;
 public class Application {
 
 	public static void main(String[] args){
-		String appTitle = "Collision visualizer";
+		String appTitle = "Segments intersections visualization";
 		
 		int appWidth = 720;
 		int appHeight = 480;
 		int appScale = 1;
-		int appImageType = BufferedImage.TYPE_INT_ARGB;
+		int appImageType = BufferedImage.TYPE_INT_RGB;
 		
 		int textX = (int) (appWidth * 0.1f);
 		int textY = (int) (appHeight * 0.1f);
@@ -31,25 +31,32 @@ public class Application {
 		int l2bound = 400;
 		int l3bound = 800;
 		
-		int segmentsCount = 400;
-		float segDx = 0.75f;
-		float segDy = 0.75f;
+		// int segmentsCount = (int) Math.pow(2, 11);
+		int segmentsCount = 600;
+		float segDx = 2.0f;
+		float segDy = 2.0f;
 		float segDangle = 2.0f;
 		
 		Color backgroundColor = Color.LIGHT_GRAY;
-		Color segmentsColor = Color.BLACK;
+		Color segmentsColor = Color.DARK_GRAY;
 		Color l1CollColor = new Color(138, 43, 226);
-		Color l2CollColor = new Color(0, 0, 0);
+		Color l2CollColor = new Color(0, 0, 200);
 		Color l3CollColor = new Color(255, 0, 0);
-		Color textColor = Color.WHITE;
-		Font textFont = new Font("Lato", Font.PLAIN, 32);
+		Color textColor = new Color(234, 57, 200);
+		Font textFont = new Font("Times New Roman", Font.TRUETYPE_FONT, 32);
 		
-		new Core(new Config(appTitle, appWidth, appHeight, appScale, appImageType,
+		Config config = new Config(appTitle, appWidth, appHeight, appScale, appImageType,
 				textX, textY,
 				l2bound, l3bound,
 				segmentsCount, segDx, segDy, segDangle,
 				backgroundColor, segmentsColor, l1CollColor, l2CollColor, l3CollColor,
-				textColor, textFont)).start();
+				textColor, textFont);
+		
+		// Without visualization
+		// new LightCore(config).start();
+		
+		// With visualization
+		new Core(config).start();
 	}
 	
 }

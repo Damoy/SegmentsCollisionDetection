@@ -14,18 +14,19 @@ public final class Generator {
 	
 	public static ImmutableList<Segment> generateSegments(Config config, World world){
 		MutableList<Segment> segments = newList();
-		
 		int nb = config.getSegmentsCount();
 		int width = config.getAppScale();
-		int height = (int) (config.getAppHeight() * 0.1);
+		int height = (int) (config.getAppHeight() * 0.1f);
+		// int height = (int) ((config.getAppWidth() * 1.5f) / (Math.sqrt(config.getSegmentsCount())));
 		
 		float x, y, dx, dy, angleDegrees, dangle;
 		
 		for(int i = 0; i < nb; ++i) {
-			x = frand(width, config.getAppWidth() - width);
-			y = frand(height, config.getAppHeight() - height);
-			dx = ibool() ? config.getSegDx() : -config.getSegDx();
-			dy = ibool() ? config.getSegDy() : -config.getSegDy();
+			x = frand(width + 1, config.getAppWidth() - width - 1);
+			y = frand(height + 1, config.getAppHeight() - height - 1);
+			
+			dx = frand(-config.getSegDx(), config.getSegDx());
+			dy = frand(-config.getSegDy(), config.getSegDy());
 			
 			angleDegrees = frand(0, 90);
 			dangle = frand(-config.getSegDangle(), config.getSegDangle());

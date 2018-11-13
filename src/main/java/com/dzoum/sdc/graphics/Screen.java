@@ -8,6 +8,9 @@ import java.awt.image.BufferedImage;
 import com.dzoum.sdc.core.Core;
 import com.dzoum.sdc.core.config.Config;
 
+/**
+ * Window screen.
+ */
 public class Screen {
 	
 	private BufferedImage content;
