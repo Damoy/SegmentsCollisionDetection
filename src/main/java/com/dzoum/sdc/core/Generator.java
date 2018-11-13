@@ -12,7 +12,7 @@ public final class Generator {
 
 	private Generator() {}
 	
-	public static ImmutableList<Segment> generateSegments(Config config){
+	public static ImmutableList<Segment> generateSegments(Config config, World world){
 		MutableList<Segment> segments = newList();
 		
 		int nb = config.getSegmentsCount();
@@ -34,7 +34,7 @@ public final class Generator {
 				dangle = frand(-3, 3);
 			}
 			
-			segments.add(newSeg(config, x, y, dx, dy,
+			segments.add(newSeg(config, world, x, y, dx, dy,
 					width, height, angleDegrees, dangle));
 		}
 		

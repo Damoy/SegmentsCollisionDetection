@@ -110,7 +110,7 @@ public class Core extends JPanel implements Runnable, KeyListener {
 	}
 
 	public void render() {
-		screen.colorize(Color.PINK);
+		screen.colorize(Color.WHITE);
 		world.render(screen);
 		screen.render();
 	}

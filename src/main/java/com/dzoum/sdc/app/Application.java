@@ -10,7 +10,7 @@ public class Application {
 
 	public static void main(String[] args){
 		new Core(new Config("Collision visualizer", 720, 480, 1,
-				BufferedImage.TYPE_INT_ARGB, 100, Color.BLUE)).start();
+				BufferedImage.TYPE_INT_ARGB, 8, Color.BLACK)).start();
 	}
 	
 }

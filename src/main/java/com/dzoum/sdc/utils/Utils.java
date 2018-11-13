@@ -1,5 +1,6 @@
 package com.dzoum.sdc.utils;
 
+import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -9,6 +10,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 public class Utils {
+	
+// 	public static Color COLLISION_COLOR = new Color(138, 43, 226);
+	public static Color COLLISION_COLOR = Color.RED;
 
 	private static Random SEED = new Random();
 

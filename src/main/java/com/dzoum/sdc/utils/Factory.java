@@ -1,11 +1,12 @@
 package com.dzoum.sdc.utils;
 
-import java.awt.Color;
-
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.collections.impl.factory.Lists;
+import org.eclipse.collections.impl.factory.Maps;
 
+import com.dzoum.sdc.core.World;
 import com.dzoum.sdc.core.config.Config;
 import com.dzoum.sdc.core.model.Segment;
 
@@ -46,11 +47,18 @@ public class Factory {
 	}
 	
 	/**
+	 * Create new mutable Map of given parameters.
+	 */
+	public static <K, V> MutableMap<K, V> newMap() {
+		return Maps.mutable.empty();
+	}
+	
+	/**
 	 * Create a new segment.
 	 */
-	public static Segment newSeg(Config config, float x, float y, float dx, float dy,
+	public static Segment newSeg(Config config, World world, float x, float y, float dx, float dy,
 			int width, int height, float angleDegrees, float dangle) {
-		return new Segment(config, x, y, dx, dy, width, height, angleDegrees, dangle, config.getSegmentsColor());
+		return new Segment(config, world, x, y, dx, dy, width, height, angleDegrees, dangle, config.getSegmentsColor());
 	}
 
 }

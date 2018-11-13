@@ -6,4 +6,8 @@ public class FloatRef {
 	
 	public float value = NULL;
 	
+	public void reset() {
+		value = NULL;
+	}
+	
 }

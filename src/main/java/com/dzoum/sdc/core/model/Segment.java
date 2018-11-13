@@ -3,13 +3,36 @@ package com.dzoum.sdc.core.model;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.map.MutableMap;
+
+import com.dzoum.sdc.core.World;
+import com.dzoum.sdc.core.collision.CollisionDetector;
 import com.dzoum.sdc.core.config.Config;
 import com.dzoum.sdc.graphics.Screen;
+import com.dzoum.sdc.utils.Factory;
+import com.dzoum.sdc.utils.FloatRef;
+import com.dzoum.sdc.utils.Utils;
 
 public class Segment {
+	
+	private static class Pair<K, V> {
+		public K key;
+		public V value;
+		
+		public Pair(K k, V v) {
+			this.key = k;
+			this.value = v;
+		}
+	}
 
 	private Config config;
+	private World world;
 	private Color color;
+	private MutableMap<Segment, Pair<Float, Float>> collisions;
+	private ImmutableList<Segment> near;
+	private FloatRef xCollisionRef;
+	private FloatRef yCollisionRef;
 
 	// center x, y
 	private float cx;
@@ -28,22 +51,31 @@ public class Segment {
 	// sizes
 	private int width;
 	private int height;
+	private int circleRadius;
+	private int circlePosOffset;
 
 	private float angleDegrees;
 	private float dangle;
 
-	public Segment(Config config, float cx, float cy, float dx, float dy,
+	public Segment(Config config, World world, float cx, float cy, float dx, float dy,
 			int width, int height, float angleDegrees, float dangle, Color color) {
 		this.config = config;
+		this.world = world;
 		this.cx = cx;
 		this.cy = cy;
 		this.dx = dx;
 		this.dy = dy;
 		this.width = width;
 		this.height = height;
+		this.circleRadius = height >> 3;
+		this.circlePosOffset = this.circleRadius >> 1;
 		this.angleDegrees = angleDegrees;
 		this.dangle = dangle;
 		this.color = color;
+		this.collisions = Factory.newMap();
+		this.near = null;
+		this.xCollisionRef = new FloatRef();
+		this.yCollisionRef = new FloatRef();
 	}
 	
 	public void update() {
@@ -77,6 +109,24 @@ public class Segment {
 		y1 += cy;
 		x2 += cx;
 		y2 += cy;
+		
+		near = world.select(this, getHeight());
+		
+		for(Segment segment : near) {
+			xCollisionRef.reset();
+			yCollisionRef.reset();
+			
+			if(CollisionDetector.intersects(this, segment, xCollisionRef, yCollisionRef)) {
+				if(collisions.containsKey(segment)){
+					collisions.get(segment).key = xCollisionRef.value;
+					collisions.get(segment).value = yCollisionRef.value;
+				} else {
+					collisions.put(segment, new Pair<>(xCollisionRef.value, yCollisionRef.value));
+				}
+			} else if(collisions.containsKey(segment)) {
+				collisions.remove(segment);
+			}
+		}
 	}
 	
 	
@@ -116,6 +166,12 @@ public class Segment {
 		Color savedColor = g.getColor();
 		g.setColor(color);
 		g.drawLine((int) x1, (int) y1, (int) x2, (int) y2);
+		
+		g.setColor(Utils.COLLISION_COLOR);
+		collisions.values().forEach(p -> g.fillOval(
+				(int) p.key.floatValue() - circlePosOffset, (int) p.value.floatValue() - circlePosOffset,
+				circleRadius, circleRadius));
+				
 		g.setColor(savedColor);
 	}
 	
