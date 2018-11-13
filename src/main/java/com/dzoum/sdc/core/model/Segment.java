@@ -207,23 +207,19 @@ public class Segment {
 		Graphics2D g = s.g();
 		Color savedColor = g.getColor();
 		g.setColor(color);
-		
 		// render segment
 		g.drawLine((int) x1, (int) y1, (int) x2, (int) y2);
-		
-		// render segment intersections
-		collisions.values().forEach(p -> {
-			g.setColor(p.getColor());
-			g.fillOval((int) p.key.floatValue() - circlePosOffset, (int) p.value.floatValue() - circlePosOffset,
-				circleRadius, circleRadius);});
-				
 		g.setColor(savedColor);
 	}
 	
-	public Color getColor() {
-		return color;
+	// render segment intersections
+	public void renderIntersections(Screen s) {
+		collisions.values().forEach(p -> {
+		s.g().setColor(p.getColor());
+		s.g().fillOval((int) p.key.floatValue() - circlePosOffset, (int) p.value.floatValue() - circlePosOffset,
+			circleRadius, circleRadius);});
 	}
-
+	
 	public void setColor(Color color) {
 		this.color = color;
 	}

@@ -15,7 +15,7 @@ import com.dzoum.sdc.core.config.Config;
  * @see Config
  */
 public class Application {
-
+	
 	public static void main(String[] args){
 		String appTitle = "Segments intersections visualization";
 		
@@ -32,25 +32,37 @@ public class Application {
 		int l3bound = 800;
 		
 		// int segmentsCount = (int) Math.pow(2, 11);
-		int segmentsCount = 1000;
+		int segmentsCount = 350;
 		float segDx = 2.0f;
 		float segDy = 2.0f;
 		float segDangle = 2.0f;
 		
-		Color backgroundColor = Color.LIGHT_GRAY;
-		Color segmentsColor = Color.DARK_GRAY;
-		Color l1CollColor = new Color(138, 43, 226);
-		Color l2CollColor = new Color(0, 0, 200);
-		Color l3CollColor = new Color(255, 0, 0);
-		Color textColor = Color.DARK_GRAY;
+		boolean purpleTheme = true;
+		Color backgroundColor;
+		Color segmentsColor;
+		Color l1CollColor;
+		Color l2CollColor;
+		Color l3CollColor;
+		Color textColor;
 		
-//		Color l1CollColor = new Color(148, 0, 211);
-//		Color l2CollColor = new Color(139, 0, 139);
-//		Color l3CollColor = Color.BLUE;
-// 		Color textColor = new Color(50, 100, 100);
+		if(purpleTheme) {
+			// backgroundColor = new Color(216, 191, 216);
+			backgroundColor = new Color(221, 160, 221);
+			segmentsColor = Color.DARK_GRAY;
+			l1CollColor = new Color(230, 230, 230);
+			l2CollColor = Color.CYAN;
+			l3CollColor = Color.BLUE;
+			textColor = Color.WHITE;
+		} else {
+			backgroundColor = Color.LIGHT_GRAY;
+			segmentsColor = Color.DARK_GRAY;
+			l1CollColor = new Color(138, 43, 226);
+			l2CollColor = new Color(0, 0, 200);
+			l3CollColor = new Color(255, 0, 0);
+			textColor = Color.DARK_GRAY;
+		}
 		
 		Font textFont = new Font("Times New Roman", Font.TRUETYPE_FONT, 46);
-		
 		Config config = new Config(appTitle, appWidth, appHeight, appScale, appImageType,
 				textX, textY,
 				l2bound, l3bound,

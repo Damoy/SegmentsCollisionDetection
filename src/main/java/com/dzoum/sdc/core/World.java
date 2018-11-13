@@ -42,7 +42,12 @@ public class World {
 	private Color saveColor;
 	public void render(Screen s) {
 		segments.forEach(seg -> seg.render(s));
-		saveColor = s.g().getColor();
+		segments.forEach(seg -> seg.renderIntersections(s));
+		renderUI(s);
+	}
+	
+	private void renderUI(Screen s) {
+		saveColor = s.g().getColor();		
 		s.g().setColor(config.getScreenColor());
 		s.g().fillRect(textX, 
 				textY - (int) (config.getTextFont().getSize() * 0.75f),
