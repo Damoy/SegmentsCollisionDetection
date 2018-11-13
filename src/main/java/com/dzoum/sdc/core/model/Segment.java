@@ -12,17 +12,29 @@ import com.dzoum.sdc.core.config.Config;
 import com.dzoum.sdc.graphics.Screen;
 import com.dzoum.sdc.utils.Factory;
 import com.dzoum.sdc.utils.FloatRef;
-import com.dzoum.sdc.utils.Utils;
 
 public class Segment {
 	
 	private static class Pair<K, V> {
+		public Config config;
 		public K key;
 		public V value;
+		public long startTime;
 		
-		public Pair(K k, V v) {
+		public Pair(Config config, K k, V v) {
+			this.config = config;
 			this.key = k;
 			this.value = v;
+			this.startTime = System.currentTimeMillis();
+		}
+		
+		public Color getColor() {
+			long collTime = System.currentTimeMillis() - startTime;
+			if(collTime > config.getL3bound())
+				return config.getL3CollColor();
+			if(collTime > config.getL2bound())
+				return config.getL2CollColor();
+			return config.getL1CollColor();
 		}
 	}
 
@@ -58,7 +70,7 @@ public class Segment {
 	private float dangle;
 
 	public Segment(Config config, World world, float cx, float cy, float dx, float dy,
-			int width, int height, float angleDegrees, float dangle, Color color) {
+			int width, int height, float angleDegrees, float dangle) {
 		this.config = config;
 		this.world = world;
 		this.cx = cx;
@@ -71,7 +83,7 @@ public class Segment {
 		this.circlePosOffset = this.circleRadius >> 1;
 		this.angleDegrees = angleDegrees;
 		this.dangle = dangle;
-		this.color = color;
+		this.color = config.getSegmentsColor();
 		this.collisions = Factory.newMap();
 		this.near = null;
 		this.xCollisionRef = new FloatRef();
@@ -121,14 +133,15 @@ public class Segment {
 					collisions.get(segment).key = xCollisionRef.value;
 					collisions.get(segment).value = yCollisionRef.value;
 				} else {
-					collisions.put(segment, new Pair<>(xCollisionRef.value, yCollisionRef.value));
+					collisions.put(segment, new Pair<>(config, xCollisionRef.value, yCollisionRef.value));
+					config.incCollisionsCount();
 				}
 			} else if(collisions.containsKey(segment)) {
 				collisions.remove(segment);
+				config.decCollisionsCount();
 			}
 		}
 	}
-	
 	
 	// Check walls collisions
 	private void checkBounds() {
@@ -167,10 +180,10 @@ public class Segment {
 		g.setColor(color);
 		g.drawLine((int) x1, (int) y1, (int) x2, (int) y2);
 		
-		g.setColor(Utils.COLLISION_COLOR);
-		collisions.values().forEach(p -> g.fillOval(
-				(int) p.key.floatValue() - circlePosOffset, (int) p.value.floatValue() - circlePosOffset,
-				circleRadius, circleRadius));
+		collisions.values().forEach(p -> {
+			g.setColor(p.getColor());
+			g.fillOval((int) p.key.floatValue() - circlePosOffset, (int) p.value.floatValue() - circlePosOffset,
+				circleRadius, circleRadius);});
 				
 		g.setColor(savedColor);
 	}

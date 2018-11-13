@@ -18,6 +18,7 @@ public class Core extends JPanel implements Runnable, KeyListener {
 
 	// configuration
 	private Config config;
+	private Color screenColor;
 
 	// game thread
 	private Thread thread;
@@ -36,6 +37,7 @@ public class Core extends JPanel implements Runnable, KeyListener {
 		this.window = new Window(this, this.config);
 		this.screen = new Screen(this, this.config);
 		this.world = new World(this, this.config);
+		this.screenColor = config.getScreenColor();
 		this.initWindow();
 	}
 
@@ -110,7 +112,7 @@ public class Core extends JPanel implements Runnable, KeyListener {
 	}
 
 	public void render() {
-		screen.colorize(Color.WHITE);
+		screen.colorize(screenColor);
 		world.render(screen);
 		screen.render();
 	}

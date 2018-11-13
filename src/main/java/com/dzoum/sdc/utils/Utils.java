@@ -11,7 +11,6 @@ import java.util.Random;
 
 public class Utils {
 	
-// 	public static Color COLLISION_COLOR = new Color(138, 43, 226);
 	public static Color COLLISION_COLOR = Color.RED;
 
 	private static Random SEED = new Random();

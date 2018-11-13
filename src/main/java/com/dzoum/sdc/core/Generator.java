@@ -24,14 +24,14 @@ public final class Generator {
 		for(int i = 0; i < nb; ++i) {
 			x = frand(width, config.getAppWidth() - width);
 			y = frand(height, config.getAppHeight() - height);
-			dx = ibool() ? 1 : -1;
-			dy = ibool() ? 1 : -1;
+			dx = ibool() ? config.getSegDx() : -config.getSegDx();
+			dy = ibool() ? config.getSegDy() : -config.getSegDy();
 			
 			angleDegrees = frand(0, 90);
-			dangle = frand(-3, 3);
+			dangle = frand(-config.getSegDangle(), config.getSegDangle());
 			
 			while(dangle == 0) {
-				dangle = frand(-3, 3);
+				dangle = frand(-config.getSegDangle(), config.getSegDangle());
 			}
 			
 			segments.add(newSeg(config, world, x, y, dx, dy,

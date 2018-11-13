@@ -58,7 +58,7 @@ public class Factory {
 	 */
 	public static Segment newSeg(Config config, World world, float x, float y, float dx, float dy,
 			int width, int height, float angleDegrees, float dangle) {
-		return new Segment(config, world, x, y, dx, dy, width, height, angleDegrees, dangle, config.getSegmentsColor());
+		return new Segment(config, world, x, y, dx, dy, width, height, angleDegrees, dangle);
 	}
 
 }

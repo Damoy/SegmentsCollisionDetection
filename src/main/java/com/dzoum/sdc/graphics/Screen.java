@@ -14,12 +14,15 @@ public class Screen {
 	private Graphics2D g;
 	private Core core;
 	private Config config;
+	private Color textColor;
 	
 	public Screen(Core core, Config config) {
 		this.core = core;
 		this.config = config;
 		this.content = new BufferedImage(config.getAppWidth(), config.getAppHeight(), config.getAppScreenType());
 		this.g = (Graphics2D) this.content.getGraphics();	
+		this.textColor = config.getTextColor();
+		this.g.setFont(config.getTextFont());
 	}
 	
 	public void render() {
@@ -30,12 +33,12 @@ public class Screen {
 		g2.dispose();
 	}
 	
-	public void render(BufferedImage image, int x, int y) {
-		g.drawImage(image, x, y, null);
-	}
-	
+	private Color saveColor;
 	public void render(String text, int x, int y) {
+		saveColor = g.getColor();
+		g.setColor(textColor);
 		g.drawString(text, x, y);
+		g.setColor(saveColor);
 	}
 	
 	public void colorize(Color color) {
@@ -46,5 +49,4 @@ public class Screen {
 	public Graphics2D g() {
 		return g;
 	}
-
 }
