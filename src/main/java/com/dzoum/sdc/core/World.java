@@ -1,5 +1,7 @@
 package com.dzoum.sdc.core;
 
+import java.awt.Color;
+
 import org.eclipse.collections.api.list.ImmutableList;
 
 import com.dzoum.sdc.core.config.Config;
@@ -37,9 +39,32 @@ public class World {
 				+ ((s.getCy() - center.getCy()) * (s.getCy() - center.getCy())) < radius * radius));
 	}
 	
+	private Color saveColor;
 	public void render(Screen s) {
 		segments.forEach(seg -> seg.render(s));
+		saveColor = s.g().getColor();
+		s.g().setColor(config.getScreenColor());
+		s.g().fillRect(textX, 
+				textY - (int) (config.getTextFont().getSize() * 0.75f),
+				textX + getTextCacheXOffset(),
+				textY - (int) (config.getTextFont().getSize() * 1.25f));
 		s.render(String.valueOf(config.getCollisionsCount()), textX, textY);
+		s.g().setColor(saveColor);
+	}
+	
+	private int getTextCacheXOffset() {
+		switch((int) Math.log10(config.getCollisionsCount()) + 1) {
+		case 1:
+			return (int) (-config.getTextFont().getSize());
+		case 2:
+			return (int) (-config.getTextFont().getSize() >> 1);
+		case 3:
+			return (int) (config.getTextFont().getSize() * 0.05f);
+		case 4:
+			return (int) (config.getTextFont().getSize() * 0.5f);
+		}
+		
+		return (int) (-config.getTextFont().getSize());
 	}
 	
 	public ImmutableList<Segment> getSegments(){

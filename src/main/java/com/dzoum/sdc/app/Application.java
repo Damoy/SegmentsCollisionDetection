@@ -25,14 +25,14 @@ public class Application {
 		int appImageType = BufferedImage.TYPE_INT_RGB;
 		
 		int textX = (int) (appWidth * 0.1f);
-		int textY = (int) (appHeight * 0.1f);
+		int textY = (int) (appHeight * 0.2f);
 		
 		// milliseconds bounds before collision color update
 		int l2bound = 400;
 		int l3bound = 800;
 		
 		// int segmentsCount = (int) Math.pow(2, 11);
-		int segmentsCount = 600;
+		int segmentsCount = 1000;
 		float segDx = 2.0f;
 		float segDy = 2.0f;
 		float segDangle = 2.0f;
@@ -42,8 +42,14 @@ public class Application {
 		Color l1CollColor = new Color(138, 43, 226);
 		Color l2CollColor = new Color(0, 0, 200);
 		Color l3CollColor = new Color(255, 0, 0);
-		Color textColor = new Color(234, 57, 200);
-		Font textFont = new Font("Times New Roman", Font.TRUETYPE_FONT, 32);
+		Color textColor = Color.DARK_GRAY;
+		
+//		Color l1CollColor = new Color(148, 0, 211);
+//		Color l2CollColor = new Color(139, 0, 139);
+//		Color l3CollColor = Color.BLUE;
+// 		Color textColor = new Color(50, 100, 100);
+		
+		Font textFont = new Font("Times New Roman", Font.TRUETYPE_FONT, 46);
 		
 		Config config = new Config(appTitle, appWidth, appHeight, appScale, appImageType,
 				textX, textY,
