@@ -31,7 +31,7 @@ public class Application {
 		int l2bound = 400;
 		int l3bound = 800;
 		
-		int segmentsCount = 8;
+		int segmentsCount = 400;
 		float segDx = 0.75f;
 		float segDy = 0.75f;
 		float segDangle = 2.0f;

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.map.MutableMap;
 
 import com.dzoum.sdc.core.World;
@@ -43,6 +44,7 @@ public class Segment {
 	private Color color;
 	private MutableMap<Segment, Pair<Float, Float>> collisions;
 	private ImmutableList<Segment> near;
+	private MutableList<Segment> collisionsWith;
 	private FloatRef xCollisionRef;
 	private FloatRef yCollisionRef;
 
@@ -85,6 +87,7 @@ public class Segment {
 		this.dangle = dangle;
 		this.color = config.getSegmentsColor();
 		this.collisions = Factory.newMap();
+		this.collisionsWith = Factory.newList();
 		this.near = null;
 		this.xCollisionRef = new FloatRef();
 		this.yCollisionRef = new FloatRef();
@@ -125,6 +128,8 @@ public class Segment {
 		near = world.select(this, getHeight());
 		
 		for(Segment segment : near) {
+			if(segment.collisionsWith.contains(this)) continue;
+			
 			xCollisionRef.reset();
 			yCollisionRef.reset();
 			
@@ -135,10 +140,12 @@ public class Segment {
 				} else {
 					collisions.put(segment, new Pair<>(config, xCollisionRef.value, yCollisionRef.value));
 					config.incCollisionsCount();
+					collisionsWith.add(segment);
 				}
 			} else if(collisions.containsKey(segment)) {
 				collisions.remove(segment);
 				config.decCollisionsCount();
+				collisionsWith.remove(segment);
 			}
 		}
 	}
