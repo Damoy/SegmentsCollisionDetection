@@ -65,6 +65,6 @@ public final class Output {
 		}
 		
 		Utils.println("lines:" + lines.length); 
-		return Utils.log2(collisionsCount / lines.length) + ";" + Utils.log2(fps / lines.length);
+		return Utils.log2(collisionsCount / (float) lines.length) + ";" + Utils.log2(fps / (float) lines.length);
 	}
 }

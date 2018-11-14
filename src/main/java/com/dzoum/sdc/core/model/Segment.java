@@ -144,7 +144,12 @@ public class Segment {
 		// get segments that are around this (visibility radius: knownAreaRadius)
 		near = world.select(this, knownAreaRadius);
 		
+		// Naïve approach
+		//near = world.getSegments();
+		
 		for(Segment segment : near){
+			if(segment == this) continue;
+			
 			// avoid x checks y and y checks x
 			if(segment.collisions.containsKey(this)) continue;
 			
